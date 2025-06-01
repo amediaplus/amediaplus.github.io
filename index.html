@@ -36,12 +36,14 @@
             background: linear-gradient(45deg, #1a73e8, #34c759);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            cursor: pointer;
         }
         .input-section {
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         #urlInput {
             padding: 12px;
@@ -56,7 +58,7 @@
             border-color: #1a73e8;
             box-shadow: 0 0 8px rgba(26, 115, 232, 0.2);
         }
-        #goButton {
+        #goButton, #saveButton {
             padding: 12px 24px;
             background: #1a73e8;
             color: white;
@@ -66,9 +68,12 @@
             cursor: pointer;
             transition: background 0.3s ease, transform 0.2s ease;
         }
-        #goButton:hover {
+        #goButton:hover, #saveButton:hover {
             background: #1557b0;
             transform: scale(1.05);
+        }
+        #saveButton {
+            display: none;
         }
         .article {
             margin-top: 20px;
@@ -131,16 +136,17 @@
             .logo { font-size: 2rem; }
             #urlInput { width: 100%; }
             .input-section { flex-direction: column; }
-            #goButton { width: 100%; }
+            #goButton, #saveButton { width: 100%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">Amedia+</div>
+        <div class="logo" onclick="resetPage()">Amedia+</div>
         <div class="input-section">
             <input type="text" id="urlInput" placeholder="Lim inn URL til Amedia-artikkel her">
             <button id="goButton">Søk</button>
+            <button id="saveButton">Lagre som PDF</button>
         </div>
         <div id="article" class="article"></div>
         <div class="footer">Laget av Sebbi</div>
@@ -149,13 +155,14 @@
     <script>
         document.getElementById('goButton').addEventListener('click', function() {
             const urlInput = document.getElementById('urlInput').value;
-            const idMatch = urlInput.match(/(\d-\d{2,3}-\d{6,7})/);
+            const idMatch = urlInput.match(/\d+-\d+-\d+/);
             if (idMatch) {
                 const id = idMatch[0];
                 fetch(`https://www.alt.no/api/content/acs/${id}`)
                     .then(response => response.json())
                     .then(data => {
                         displayArticle(data);
+                        document.getElementById('saveButton').style.display = 'inline-block';
                     })
                     .catch(error => {
                         document.getElementById('article').innerHTML = '<p class="error">Ukjent feil. Prøv igjen!</p>';
@@ -163,6 +170,7 @@
                     });
             } else {
                 document.getElementById('article').innerHTML = '<p class="error">Ugyldig link.</p>';
+                document.getElementById('saveButton').style.display = 'none';
             }
         });
 
@@ -190,6 +198,30 @@
                 <div class="body">${data.body}</div>
             `;
         }
+
+        function resetPage() {
+            document.getElementById('urlInput').value = '';
+            document.getElementById('article').innerHTML = '';
+            document.getElementById('saveButton').style.display = 'none';
+        }
+
+        document.getElementById('saveButton').addEventListener('click', function () {
+            const articleContent = document.getElementById('article');
+            if (!articleContent.innerHTML.trim()) {
+                alert('Ingen artikkel å lagre!');
+                return;
+            }
+
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <html><head><title>Artikkel</title></head>
+                <body>${articleContent.innerHTML}</body></html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        });
     </script>
 </body>
 </html>
