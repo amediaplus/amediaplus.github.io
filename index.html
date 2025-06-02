@@ -1,227 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amedia+</title>
-    <style>
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0;
-            background: linear-gradient(135deg, #f0f2f5 0%, #e3e6ea 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .container:hover {
-            transform: translateY(-5px);
-        }
-        .logo {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #1a73e8;
-            text-align: center;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(45deg, #1a73e8, #34c759);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-        }
-        .input-section {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        #urlInput {
-            padding: 12px;
-            width: 400px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        #urlInput:focus {
-            outline: none;
-            border-color: #1a73e8;
-            box-shadow: 0 0 8px rgba(26, 115, 232, 0.2);
-        }
-        #goButton, #saveButton {
-            padding: 12px 24px;
-            background: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-        #goButton:hover, #saveButton:hover {
-            background: #1557b0;
-            transform: scale(1.05);
-        }
-        #saveButton {
-            display: none;
-        }
-        .article {
-            margin-top: 20px;
-            animation: fadeIn 0.5s ease-in;
-        }
-        .article h1 {
-            font-size: 2.2rem;
-            color: #222;
-            margin-bottom: 15px;
-            line-height: 1.3;
-        }
-        .article .meta {
-            font-size: 0.9em;
-            color: #555;
-            margin-bottom: 15px;
-            border-left: 4px solid #1a73e8;
-            padding-left: 10px;
-        }
-        .article .meta a {
-            color: #1a73e8;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .article .meta a:hover {
-            text-decoration: underline;
-        }
-        .article .lead {
-            font-size: 1.2em;
-            font-style: italic;
-            color: #333;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-        .article .body {
-            line-height: 1.7;
-            color: #333;
-            font-size: 1rem;
-        }
-        .footer {
-            text-align: center;
-            font-size: 0.8em;
-            color: #777;
-            margin-top: 40px;
-            padding: 20px 0;
-            border-top: 1px solid #e0e0e0;
-        }
-        .error {
-            color: #d32f2f;
-            font-weight: 500;
-            text-align: center;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 600px) {
-            .container { margin: 10px; padding: 20px; }
-            .logo { font-size: 2rem; }
-            #urlInput { width: 100%; }
-            .input-section { flex-direction: column; }
-            #goButton, #saveButton { width: 100%; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amedia+</title>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #f0f2f5 0%, #e3e6ea 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .container {
+      position: relative;
+      max-width: 900px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-5px);
+    }
+    .dark-mode body {
+      background: #2b2b2b;
+      color: #e0e0e0;
+    }
+    .dark-mode {
+      background: #2b2b2b;
+    }
+    .dark-mode .container {
+      background: #3a3a3a;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+    }
+    .dark-mode .article .lead {
+      background: #444;
+      color: #e5e5e5;
+    }
+    .dark-mode .article h1 {
+      color: #f0f0f0;
+    }
+    .dark-mode .article .meta {
+      color: #ccc;
+    }
+    .dark-mode .article .body {
+      color: #ddd;
+    }
+    .dark-mode .footer {
+      color: #aaa;
+      border-color: #333;
+    }
+    .dark-mode .comments-container {
+      border-color: #444;
+      background: #3a3a3a;
+    }
+    .dark-mode .comments-title {
+      color: #f0f0f0;
+    }
+    .dark-mode .comments-iframe {
+      filter: invert(1) hue-rotate(180deg);
+      background-color: #fff;
+    }
+
+    /* Image overlay styles */
+    .image-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    .image-overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(45deg, #1a73e8, #34c759);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+    }
+
+    .toggle-darkmode {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .input-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    #urlInput {
+      padding: 12px;
+      width: 400px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    #urlInput:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 8px rgba(26, 115, 232, 0.2);
+    }
+
+    #goButton, #saveButton {
+      padding: 12px 24px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    #goButton:hover, #saveButton:hover {
+      background: #1557b0;
+      transform: scale(1.05);
+    }
+    #saveButton {
+      display: none;
+    }
+
+    .article {
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .article h1 {
+      font-size: 2.2rem;
+      color: #222;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+    .article .meta {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 15px;
+      border-left: 4px solid #1a73e8;
+      padding-left: 10px;
+    }
+    .article .meta a {
+      color: #1a73e8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .article .meta a:hover {
+      text-decoration: underline;
+    }
+    .article .lead {
+      font-size: 1.2em;
+      font-style: italic;
+      color: #333;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+    .article .body {
+      line-height: 1.7;
+      color: #333;
+      font-size: 1rem;
+    }
+    .article-image {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .article-image:hover {
+      transform: scale(1.01);
+    }
+    .comments-container {
+      margin-top: 40px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 20px;
+      display: none; /* Hidden by default */
+    }
+    .comments-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #222;
+    }
+    .comments-iframe {
+      width: 100%;
+      border: none;
+      min-height: 500px;
+      border-radius: 8px;
+      transition: filter 0.3s ease;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.8em;
+      color: #777;
+      margin-top: 40px;
+      padding: 20px 0;
+      border-top: 1px solid #e0e0e0;
+    }
+    .error {
+      color: #d32f2f;
+      font-weight: 500;
+      text-align: center;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .container { margin: 10px; padding: 20px; }
+      .logo { font-size: 2rem; }
+      #urlInput { width: 100%; }
+      .input-section { flex-direction: column; }
+      #goButton, #saveButton { width: 100%; }
+    }
+
+    /* Print-specific styles */
+    @media print {
+      .article-image {
+        max-width: 50%;
+        max-height: 300px;
+        margin: 10px auto;
+      }
+      .container {
+        box-shadow: none;
+        margin: 0;
+        padding: 10px;
+      }
+      .input-section, .toggle-darkmode, .logo, .footer, #saveButton {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo" onclick="resetPage()">Amedia+</div>
-        <div class="input-section">
-            <input type="text" id="urlInput" placeholder="Lim inn URL til Amedia-artikkel her">
-            <button id="goButton">Søk</button>
-            <button id="saveButton">Lagre som PDF</button>
-        </div>
-        <div id="article" class="article"></div>
-        <div class="footer">Laget av Sebbi</div>
+  <div class="container">
+    <button class="toggle-darkmode" onclick="toggleDarkMode()">🌙</button>
+    <div class="logo" onclick="resetPage()">Amedia+</div>
+    <div class="input-section">
+      <input type="text" id="urlInput" placeholder="Lim inn URL til Amedia-artikkel her">
+      <button id="goButton">Søk</button>
+      <button id="saveButton">Lagre som PDF</button>
     </div>
+    <div id="article" class="article"></div>
+    <div id="comments" class="comments-container"></div>
+    <div class="footer">Laget av Sebbi</div>
+  </div>
 
-    <script>
-        document.getElementById('goButton').addEventListener('click', function() {
-            const urlInput = document.getElementById('urlInput').value;
-            const idMatch = urlInput.match(/\d+-\d+-\d+/);
-            if (idMatch) {
-                const id = idMatch[0];
-                fetch(`https://www.alt.no/api/content/acs/${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        displayArticle(data);
-                        document.getElementById('saveButton').style.display = 'inline-block';
-                    })
-                    .catch(error => {
-                        document.getElementById('article').innerHTML = '<p class="error">Ukjent feil. Prøv igjen!</p>';
-                        console.error('Error:', error);
-                    });
-            } else {
-                document.getElementById('article').innerHTML = '<p class="error">Ugyldig link.</p>';
-                document.getElementById('saveButton').style.display = 'none';
-            }
-        });
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const btn = document.querySelector('.toggle-darkmode');
+      btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    }
 
-        function displayArticle(data) {
-            const articleDiv = document.getElementById('article');
-            let authors = data.byline.map(author => 
-                `<a href="mailto:${author.email}">${author.name}</a>`
-            ).join(', ');
+    document.getElementById('goButton').addEventListener('click', function() {
+      const urlInput = document.getElementById('urlInput').value;
+      const idMatch = urlInput.match(/\d+-\d+-\d+/);
+      if (idMatch) {
+        const id = idMatch[0];
+        
+        // First fetch the article data
+        fetch(`https://www.alt.no/api/content/acs/${id}`)
+          .then(response => response.json())
+          .then(data => {
+            // Then fetch the webpage to get the image and domain
+            fetch(`https://www.alt.no/s/${id}`)
+              .then(response => response.text())
+              .then(html => {
+                // Extract image URL from the HTML
+                const imageMatch = html.match(/"image":\["(.*?)"\]/);
+                let imageUrl = imageMatch ? imageMatch[1] : null;
+                
+                // Don't show the image if it's the square logo
+                if (imageUrl && imageUrl.includes("square_logo.jpg")) {
+                  imageUrl = null;
+                }
+                
+                // Extract domain from the HTML
+                const domainMatch = html.match(/responsible-editor\/embed\?publication=www\.(.*?)\.no/);
+                const domain = domainMatch ? domainMatch[1] : 'alt';
+                
+                displayArticle(data, imageUrl);
+                displayComments(id, domain);
+                document.getElementById('saveButton').style.display = 'inline-block';
+              })
+              .catch(error => {
+                console.error('Error fetching webpage:', error);
+                displayArticle(data, null);
+                document.getElementById('saveButton').style.display = 'inline-block';
+              });
+          })
+          .catch(error => {
+            document.getElementById('article').innerHTML = '<p class="error">Ukjent feil. Prøv igjen!</p>';
+            console.error('Error:', error);
+            document.getElementById('comments').style.display = 'none';
+          });
+      } else {
+        document.getElementById('article').innerHTML = '<p class="error">Ugyldig link.</p>';
+        document.getElementById('saveButton').style.display = 'none';
+        document.getElementById('comments').style.display = 'none';
+      }
+    });
 
-            const publishedAt = new Date(data.publishedAt).toLocaleString('en-GB', {
-                dateStyle: 'short',
-                timeStyle: 'short'
-            });
-            const lastModified = new Date(data.lastModified).toLocaleString('en-GB', {
-                dateStyle: 'short',
-                timeStyle: 'short'
-            });
+    function displayArticle(data, imageUrl) {
+      const articleDiv = document.getElementById('article');
+      let authors = data.byline.map(author =>
+        `<a href="mailto:${author.email}">${author.name}</a>`
+      ).join(', ');
 
-            articleDiv.innerHTML = `
-                <h1>${data.title}</h1>
-                <div class="meta">
-                    Av ${authors} | Publisert: ${publishedAt} | Sist oppdatert: ${lastModified}
-                </div>
-                <div class="lead">${data.leadText}</div>
-                <div class="body">${data.body}</div>
-            `;
-        }
+      const publishedAt = new Date(data.publishedAt).toLocaleString('en-GB', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      });
+      const lastModified = new Date(data.lastModified).toLocaleString('en-GB', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      });
 
-        function resetPage() {
-            document.getElementById('urlInput').value = '';
-            document.getElementById('article').innerHTML = '';
-            document.getElementById('saveButton').style.display = 'none';
-        }
+      let imageHtml = '';
+      if (imageUrl) {
+        imageHtml = `
+          <img src="${imageUrl}" class="article-image" alt="${data.title}" 
+               onclick="showImageOverlay('${imageUrl}')">
+        `;
+      }
 
-        document.getElementById('saveButton').addEventListener('click', function () {
-            const articleContent = document.getElementById('article');
-            if (!articleContent.innerHTML.trim()) {
-                alert('Ingen artikkel å lagre!');
-                return;
-            }
+      articleDiv.innerHTML = `
+        <h1>${data.title}</h1>
+        ${imageHtml}
+        <div class="meta">
+          Av ${authors} | Publisert: ${publishedAt} | Sist oppdatert: ${lastModified}
+        </div>
+        <div class="lead">${data.leadText}</div>
+        <div class="body">${data.body}</div>
+      `;
+    }
 
-            const printWindow = window.open('', '', 'width=800,height=600');
-            printWindow.document.write(`
-                <html><head><title>Artikkel</title></head>
-                <body>${articleContent.innerHTML}</body></html>
-            `);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        });
-    </script>
+    function showImageOverlay(imageUrl) {
+      const overlay = document.createElement('div');
+      overlay.className = 'image-overlay';
+      overlay.innerHTML = `<img src="${imageUrl}" alt="Enlarged view">`;
+      overlay.onclick = function() {
+        document.body.removeChild(overlay);
+      };
+      document.body.appendChild(overlay);
+    }
+
+    function displayComments(id, domain) {
+      const commentsDiv = document.getElementById('comments');
+      const commentsUrl = `https://www.${domain}.no/api/amediacomments/frontend/nacomment/comments-frontend/comments/?v=1.0#/comment/?url=%2F%2Fwww.${domain}.no%2F${id}&scope=www.${domain}.no&publication=www.${domain}.no`;
+      
+      commentsDiv.innerHTML = `
+        <h2 class="comments-title">Kommentarer</h2>
+        <iframe src="${commentsUrl}" class="comments-iframe" title="Kommentarer"></iframe>
+      `;
+      commentsDiv.style.display = 'block'; // Show comments when article is displayed
+    }
+
+    function resetPage() {
+      document.getElementById('urlInput').value = '';
+      document.getElementById('article').innerHTML = '';
+      document.getElementById('comments').innerHTML = '';
+      document.getElementById('comments').style.display = 'none';
+      document.getElementById('saveButton').style.display = 'none';
+    }
+
+    document.getElementById('saveButton').addEventListener('click', function () {
+      const articleContent = document.getElementById('article');
+      if (!articleContent.innerHTML.trim()) {
+        alert('Ingen artikkel å lagre!');
+        return;
+      }
+
+      const printWindow = window.open('', '', 'width=800,height=600');
+      printWindow.document.write(`
+        <html><head><title>Artikkel</title>
+        <style>
+          img { max-width: 50%; max-height: 300px; margin: 10px auto; display: block; }
+          @page { margin: 1cm; }
+        </style>
+        </head>
+        <body>${articleContent.innerHTML}</body></html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    });
+  </script>
 </body>
 </html>
